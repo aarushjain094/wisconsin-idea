@@ -144,6 +144,7 @@ const checkedCount = document.getElementById("checkedCount");
 const checkedSummary = document.getElementById("checkedSummary");
 const totalItemsLabel = document.getElementById("totalItemsLabel");
 const progressFill = document.getElementById("progressFill");
+const capitolBadge = document.getElementById("capitolBadge");
 const revealScoreButton = document.getElementById("revealScoreButton");
 const resetButton = document.getElementById("resetButton");
 const scoreModal = document.getElementById("scoreModal");
@@ -185,11 +186,25 @@ function playIntro() {
     introOverlay.classList.add("is-hidden");
     document.body.classList.remove("intro-active");
     sessionStorage.setItem(introStorageKey, "true");
-  }, 1100);
+  }, 500);
 }
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify([...savedState]));
+}
+
+function animateCapitolBadge() {
+  if (!capitolBadge) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    capitolBadge.textContent = "Capitol";
+    return;
+  }
+
+  let useCapital = false;
+  window.setInterval(() => {
+    useCapital = !useCapital;
+    capitolBadge.textContent = useCapital ? "Capital" : "Capitol";
+  }, 500);
 }
 
 function resetChecklist() {
@@ -372,4 +387,5 @@ document.addEventListener("keydown", (event) => {
 });
 
 playIntro();
+animateCapitolBadge();
 buildChecklist();
