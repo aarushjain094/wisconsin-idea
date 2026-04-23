@@ -7,10 +7,10 @@ const checklist = [
       "Pretended to be sober in front of a professor",
       "Got hit on by a TA / professor",
       "Saw a situationship unfolding on the 80",
-      "Complained about the 80 and still relied on it",
       "Overpaid for something at the bookstore and acted like it was necessary",
       "Went to office hours only when things were already catastrophic",
-      "Fought for your life to stay awake in lecture",
+      "Drank a beer with a professor",
+      "Convinced a non-Badger to eat cheese curds",
       "Panic-bought caffeine before an exam",
       "Committed floorcest",
       "Rode an electric scooter across town",
@@ -26,8 +26,8 @@ const checklist = [
     items: [
       "Rushed the field at Camp Randall",
       "Jumped Around when the Badgers were down 30",
-      'Screamed "slut" at a hockey game',
-      "Rushed the Kohl Center",
+      "Attended a hockey game where the Badgers lost despite them being outrageously successful, in general",
+      "Rushed the court at the Kohl Center",
       "Snapped a pic with a star basketball / football player",
       "Played an IM sport",
       "Froze through a tailgate that should've been canceled",
@@ -56,7 +56,7 @@ const checklist = [
       "Flirted with someone just for a cig",
       "Drank jungle juice you could not decipher and kissed someone after",
       "Rode the bull at High Noon",
-      "Paid over $35 for a LineLeap",
+      "Paid over $25 for a LineLeap",
       "Played the Das Boot game at Essen Haus",
       "Listened to an awful DJ at KK",
       "Stayed for last call at Brat's Bottomless",
@@ -73,11 +73,11 @@ const checklist = [
       "Split a pitcher of Spotted Cow at the Union",
       "Waited in line for Babcock because it was 52 degrees and that felt right",
       "Defended your favorite Madison restaurant like it was family",
-      "Built an entire Saturday around the Farmers' Market",
+      "Treated Mediterranean Cafe like a guaranteed recovery plan",
       "Ordered food because your apartment kitchen was spiritually unavailable",
       "Convinced yourself Ian's was great food at 2 a.m.",
       "Waited 30 minutes for an aggressively mid Cheba sandwich because everyone, including you, was high",
-      "Ate Paul's Pelmeni twice in a week",
+      "Ate Paul's Pel'meni twice in a week",
       "Paid extra for the cilantro rice at Estacion Inka",
     ],
   },
@@ -92,7 +92,7 @@ const checklist = [
       "Slipped on ice in public and pretended it didn't happen",
       "Under-dressed during fake spring and paid the price",
       "Sat by Lake Mendota and got nothing done",
-      "Took a winter walk that hurt your face immediately",
+      "Had a walk of shame while it was freezing outside",
       "Caught a Terrace sunset and understood the hype",
       "Had a lake day that started wholesome and ended a little feral",
       "Experienced one perfect fall day that made Madison feel unbeatable",
@@ -112,7 +112,7 @@ const checklist = [
       "Went to Comedy on State",
       "Shook the otters' hands at Henry Vilas Zoo",
       "Spent enough time on State Street to run into everyone you know",
-      "Circled the Farmers' Market and got trapped in the crowd",
+      "Ended up in a random shop on State Street and stayed longer than expected",
       "Had an in-depth conversation with Tunnel Bob",
       "Climbed at Bakke",
       "Did the Capitol to State Street to Terrace pipeline in one day",
@@ -137,6 +137,8 @@ const checklist = [
 ];
 
 const storageKey = "wisconsin-idea-checklist";
+const introStorageKey = "wisconsin-idea-intro-seen";
+const introOverlay = document.getElementById("introOverlay");
 const checklistRoot = document.getElementById("checklistRoot");
 const checkedCount = document.getElementById("checkedCount");
 const checkedSummary = document.getElementById("checkedSummary");
@@ -149,6 +151,9 @@ const modalCard = scoreModal.querySelector(".modal-card");
 const closeModalButton = document.getElementById("closeModalButton");
 const finalScore = document.getElementById("finalScore");
 const scoreSummary = document.getElementById("scoreSummary");
+const retakeButton = document.getElementById("retakeButton");
+const shareScoreButton = document.getElementById("shareScoreButton");
+const shareStatus = document.getElementById("shareStatus");
 
 const allItems = checklist.flatMap((group) => group.items);
 const categoryLookup = new Map(checklist.map((group) => [group.category, group]));
@@ -163,8 +168,37 @@ function loadState() {
   }
 }
 
+function playIntro() {
+  if (!introOverlay) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    introOverlay.remove();
+    return;
+  }
+  if (sessionStorage.getItem(introStorageKey) === "true") {
+    introOverlay.remove();
+    return;
+  }
+
+  document.body.classList.add("intro-active");
+
+  window.setTimeout(() => {
+    introOverlay.classList.add("is-hidden");
+    document.body.classList.remove("intro-active");
+    sessionStorage.setItem(introStorageKey, "true");
+  }, 1900);
+}
+
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify([...savedState]));
+}
+
+function resetChecklist() {
+  savedState.clear();
+  saveState();
+  document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+  updateProgress();
 }
 
 function getScoreSummary(score) {
@@ -196,6 +230,9 @@ function updateProgress() {
 function toggleModal(show) {
   scoreModal.classList.toggle("hidden", !show);
   scoreModal.setAttribute("aria-hidden", String(!show));
+  if (shareStatus) {
+    shareStatus.textContent = "";
+  }
 
   if (show) {
     modalCard.focus();
@@ -207,6 +244,7 @@ function toggleModal(show) {
 
 function buildChecklist() {
   const fragment = document.createDocumentFragment();
+  let itemNumber = 1;
 
   checklist.forEach((group) => {
     const categoryCard = document.createElement("article");
@@ -233,6 +271,10 @@ function buildChecklist() {
       const row = document.createElement("div");
       row.className = "item";
 
+      const number = document.createElement("span");
+      number.className = "item-number";
+      number.textContent = `${itemNumber}.`;
+
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.id = `${group.category}-${index}`.replace(/[^a-z0-9-]/gi, "-");
@@ -241,6 +283,14 @@ function buildChecklist() {
       const label = document.createElement("label");
       label.setAttribute("for", checkbox.id);
       label.textContent = item;
+
+      row.addEventListener("click", (event) => {
+        if (event.target instanceof HTMLInputElement || event.target instanceof HTMLLabelElement) {
+          return;
+        }
+
+        checkbox.click();
+      });
 
       checkbox.addEventListener("change", () => {
         if (checkbox.checked) {
@@ -253,8 +303,9 @@ function buildChecklist() {
         updateProgress();
       });
 
-      row.append(checkbox, label);
+      row.append(number, checkbox, label);
       itemsWrapper.appendChild(row);
+      itemNumber += 1;
     });
 
     categoryCard.append(header, itemsWrapper);
@@ -278,12 +329,33 @@ resetButton.addEventListener("click", () => {
   if (!savedState.size) return;
   if (!window.confirm("Reset every checked item?")) return;
 
-  savedState.clear();
-  saveState();
-  document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-    checkbox.checked = false;
-  });
-  updateProgress();
+  resetChecklist();
+});
+
+retakeButton.addEventListener("click", () => {
+  resetChecklist();
+  toggleModal(false);
+});
+
+shareScoreButton.addEventListener("click", async () => {
+  const shareText = `I got a ${finalScore.textContent} on The Wisconsin Experience. ${window.location.href}`;
+
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: "The Wisconsin Experience",
+        text: `I got a ${finalScore.textContent} on The Wisconsin Experience.`,
+        url: window.location.href,
+      });
+      shareStatus.textContent = "Shared.";
+      return;
+    }
+
+    await navigator.clipboard.writeText(shareText);
+    shareStatus.textContent = "Score copied to clipboard.";
+  } catch {
+    shareStatus.textContent = "Couldn't share right now.";
+  }
 });
 
 closeModalButton.addEventListener("click", () => toggleModal(false));
@@ -300,4 +372,5 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+playIntro();
 buildChecklist();

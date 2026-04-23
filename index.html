@@ -8,54 +8,80 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="intro-overlay" id="introOverlay" aria-hidden="true">
+      <div class="intro-backdrop" aria-hidden="true">
+        <span>Bascom Hill</span>
+        <span>Camp Randall</span>
+        <span>Lake Mendota</span>
+        <span>Memorial Union</span>
+        <span>State Street</span>
+        <span>Jump Around</span>
+      </div>
+      <div class="intro-mark">
+        <div class="intro-logo" aria-hidden="true">W</div>
+        <p class="intro-kicker">University of Wisconsin-Madison</p>
+        <p class="intro-title">The Wisconsin Idea</p>
+      </div>
+    </div>
     <div class="page-shell">
       <header class="hero">
-        <p class="eyebrow">UW-Madison Senior Bucket List</p>
-        <h1>The Wisconsin Idea</h1>
-        <p class="hero-copy">
-          Check off the Madison things you've actually done. Lower score = you've
-          accomplished more.
-        </p>
-        <div class="hero-meta">
-          <div>
-            <span class="meta-label">How it works</span>
-            <strong><span id="totalItemsLabel">100</span> checks. One very nosy score.</strong>
+        <div class="hero-layout">
+          <div class="hero-main">
+            <h1>The Wisconsin Experience</h1>
+            <p class="hero-caption">
+              Find out if you've lived the quintessential Badger experience. Don't worry; you still have a few weeks left to make the most of your senior year! Congrats on graduating :)
+            </p>
+            <div class="hero-badges" aria-hidden="true">
+              <span>On, Wisconsin</span>
+              <span>Jump Around</span>
+              <span>Camp Randall</span>
+              <span>Memorial Union</span>
+            </div>
           </div>
-          <div>
-            <span class="meta-label">Scoring</span>
-            <strong>Score = total items - items checked</strong>
+          <div class="hero-meta">
+            <div>
+              <span class="meta-label">How it works</span>
+              <p class="hero-meta-copy"><span id="totalItemsLabel">100</span> items: one score to identify how much FOMO you should have</p>
+            </div>
+            <div>
+              <span class="meta-label">Scoring</span>
+              <p class="hero-meta-copy">100 (number of total items) - items checked off. Lower = you've done more.</p>
+            </div>
           </div>
         </div>
       </header>
 
       <main class="content-grid">
-        <aside class="score-card">
-          <p class="score-card-label">Live progress</p>
-          <div class="score-card-number" id="checkedCount">0</div>
-          <p class="score-card-copy"><span id="checkedSummary">0 of 100 items checked</span></p>
-          <div class="progress-track" aria-hidden="true">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <button class="primary-button" id="revealScoreButton" type="button">
-            Reveal my score
-          </button>
-          <button class="secondary-button" id="resetButton" type="button">
-            Reset checklist
-          </button>
-        </aside>
-
         <section class="checklist-panel">
           <div class="panel-header">
             <div>
               <p class="eyebrow">Checklist</p>
-              <h2>Senior-year damage report</h2>
+              <h2>A Senior Stroll Down Memory Lane</h2>
             </div>
-            <p class="panel-note">
-              The list is grouped by vibe. Your score stays hidden until you ask
-              for it.
-            </p>
+            <div class="progress-card">
+              <p class="score-card-label">Live progress</p>
+              <div class="progress-card-topline">
+                <div class="score-card-number" id="checkedCount">0</div>
+                <p class="score-card-copy"><span id="checkedSummary">0 of 100 items checked</span></p>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+            </div>
           </div>
           <div id="checklistRoot" class="category-list"></div>
+          <div class="panel-actions">
+            <p class="panel-actions-copy">Final step: keep the score hidden until you're ready to take the hit.</p>
+            <div class="panel-actions-row">
+              <button class="secondary-button panel-reset-button" id="resetButton" type="button">
+                Reset checklist
+              </button>
+              <button class="primary-button panel-reveal-button" id="revealScoreButton" type="button">
+                Reveal my score
+              </button>
+            </div>
+            <p class="site-credit">Made by Aarush Jain</p>
+          </div>
         </section>
       </main>
     </div>
@@ -79,6 +105,15 @@
         <p class="modal-caption">
           Lower means you've actually lived a little.
         </p>
+        <div class="modal-actions">
+          <button class="secondary-button modal-secondary-button" id="retakeButton" type="button">
+            Take it again!
+          </button>
+          <button class="primary-button modal-primary-button" id="shareScoreButton" type="button">
+            Share my score
+          </button>
+        </div>
+        <p class="modal-status" id="shareStatus" aria-live="polite"></p>
       </div>
     </div>
 
