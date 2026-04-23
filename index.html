@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#b3261e" />
+    <title>The Wisconsin Idea</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">UW-Madison Senior Bucket List</p>
+        <h1>The Wisconsin Idea</h1>
+        <p class="hero-copy">
+          Check off the Madison things you've actually done. Lower score = you've
+          accomplished more.
+        </p>
+        <div class="hero-meta">
+          <div>
+            <span class="meta-label">How it works</span>
+            <strong><span id="totalItemsLabel">100</span> checks. One very nosy score.</strong>
+          </div>
+          <div>
+            <span class="meta-label">Scoring</span>
+            <strong>Score = total items - items checked</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-grid">
+        <aside class="score-card">
+          <p class="score-card-label">Live progress</p>
+          <div class="score-card-number" id="checkedCount">0</div>
+          <p class="score-card-copy"><span id="checkedSummary">0 of 100 items checked</span></p>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <button class="primary-button" id="revealScoreButton" type="button">
+            Reveal my score
+          </button>
+          <button class="secondary-button" id="resetButton" type="button">
+            Reset checklist
+          </button>
+        </aside>
+
+        <section class="checklist-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Checklist</p>
+              <h2>Senior-year damage report</h2>
+            </div>
+            <p class="panel-note">
+              The list is grouped by vibe. Your score stays hidden until you ask
+              for it.
+            </p>
+          </div>
+          <div id="checklistRoot" class="category-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal hidden" id="scoreModal" aria-hidden="true">
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="scoreTitle"
+        aria-describedby="scoreSummary"
+        tabindex="-1"
+      >
+        <button class="modal-close" id="closeModalButton" type="button" aria-label="Close score">
+          &times;
+        </button>
+        <p class="eyebrow">Final score</p>
+        <h2 id="scoreTitle">Your Wisconsin Idea score</h2>
+        <div class="score-reveal" id="finalScore">100</div>
+        <p class="modal-copy" id="scoreSummary"></p>
+        <p class="modal-caption">
+          Lower means you've actually lived a little.
+        </p>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
