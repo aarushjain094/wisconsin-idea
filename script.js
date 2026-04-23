@@ -8,12 +8,12 @@ const checklist = [
       "Got hit on by a TA / professor",
       "Saw a situationship unfolding on the 80",
       "Overpaid for something at the bookstore and acted like it was necessary",
-      "Went to office hours only when things were already catastrophic",
+      "Had a snowball fight on Bascom Hill",
       "Drank a beer with a professor",
       "Convinced a non-Badger to eat cheese curds",
       "Panic-bought caffeine before an exam",
       "Committed floorcest",
-      "Rode an electric scooter across town",
+      "Featured on a TV at a bar",
       "Beefed with a roommate physically or by straight-up stealing their shit",
       "Wished Van Vleck would get taken out by a tornado",
       "Shouted at Duo Mobile like it was a real person",
@@ -48,14 +48,14 @@ const checklist = [
       "Went out on a Thursday and paid for it Friday",
       'Said "just one drink" and got home embarrassingly late',
       "Lost your friends for 20 minutes and found them like nothing happened",
-      "Ordered late-night food in an outfit that made no sense",
-      "Woke up somewhere and needed a full minute to process where you were",
-      "Tried to act normal around someone who saw you at your worst the night before",
+      "Took a tipsy walk down State Street that somehow lasted an hour",
+      "Kayaked / canoed / sailed on Lake Mendota",
+      "Ended a night at the Terrace and told yourself you were sobering up",
       "Didn't realize how they pour at Mondays and paid the price",
       "Had a drink all 7 days of one week",
       "Flirted with someone just for a cig",
       "Drank jungle juice you could not decipher and kissed someone after",
-      "Rode the bull at High Noon",
+      "Rode the bull at Red Rock",
       "Paid over $25 for a LineLeap",
       "Played the Das Boot game at Essen Haus",
       "Listened to an awful DJ at KK",
@@ -90,7 +90,7 @@ const checklist = [
       "Jumped in the lake",
       "Spent the first warm day outside instead of in class",
       "Slipped on ice in public and pretended it didn't happen",
-      "Under-dressed during fake spring and paid the price",
+      "Completed the Lake Monona bike loop",
       "Sat by Lake Mendota and got nothing done",
       "Had a walk of shame while it was freezing outside",
       "Caught a Terrace sunset and understood the hype",
@@ -185,7 +185,7 @@ function playIntro() {
     introOverlay.classList.add("is-hidden");
     document.body.classList.remove("intro-active");
     sessionStorage.setItem(introStorageKey, "true");
-  }, 1900);
+  }, 1100);
 }
 
 function saveState() {
@@ -202,11 +202,12 @@ function resetChecklist() {
 }
 
 function getScoreSummary(score) {
-  if (score <= 15) return "Frankly, you are Wisconsin's problem now.";
-  if (score <= 35) return "You did senior year correctly and probably irresponsibly.";
-  if (score <= 55) return "Respectable. Strong Madison mileage.";
-  if (score <= 75) return "You were there, but there is still work to do.";
-  return "This reads like you stayed home with Canvas open.";
+  if (score <= 15) return "The university probably should have bought insurance for you. Thankfully, you're not Mnookin's problem anymore (not that she really cared).";
+  if (score <= 30) return "You did it right and probably irresponsibly.";
+  if (score <= 50) return "You had a good run. Knock some more out before you hang up your cleats";
+  if (score <= 70) return "Impressive; strong Madison mileage";
+  if (score <= 90) return "You were out and about, but there's still some work to do";
+  return "Did you attend parties with Canvas open?";
 }
 
 function updateProgress() {
@@ -327,8 +328,6 @@ revealScoreButton.addEventListener("click", () => {
 
 resetButton.addEventListener("click", () => {
   if (!savedState.size) return;
-  if (!window.confirm("Reset every checked item?")) return;
-
   resetChecklist();
 });
 
